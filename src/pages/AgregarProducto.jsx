@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import { collection, addDoc, query, where, getDocs, serverTimestamp, doc, updateDoc, increment, arrayUnion } from 'firebase/firestore';
 import { db } from '../services/firebase';
+import { registrarLog } from '../utils/logger';
 
 export default function AgregarProducto() {
   const navigate = useNavigate();
@@ -19,11 +20,6 @@ export default function AgregarProducto() {
   });
 
   const nombreAdmin = localStorage.getItem('usuarioNombre') || "Admin";
-
-  const registrarLog = async (accion, detalles) => {
-    try { await addDoc(collection(db, 'auditoria'), { fecha: serverTimestamp(), usuario: nombreAdmin, accion: accion, detalles: detalles }); } 
-    catch (e) { console.error(e); }
-  };
 
   // --- LÓGICA DEL ESCÁNER CON TRADUCCIÓN PROFUNDA Y ESTILIZACIÓN DEL SELECTOR ---
   useEffect(() => {

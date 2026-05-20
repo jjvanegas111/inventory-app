@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, addDoc, deleteDoc, doc, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { db } from '../services/firebase';
+import { registrarLog } from '../utils/logger';
 
 export default function AdminUsuarios() {
   const navigate = useNavigate();
@@ -10,17 +11,6 @@ export default function AdminUsuarios() {
   const [cargando, setCargando] = useState(false);
 
   const nombreAdmin = localStorage.getItem('usuarioNombre') || "Admin";
-
-  const registrarLog = async (accion, detalles) => {
-    try {
-      await addDoc(collection(db, 'auditoria'), {
-        fecha: serverTimestamp(),
-        usuario: nombreAdmin,
-        accion: accion,
-        detalles: detalles
-      });
-    } catch (e) { console.error(e); }
-  };
 
   useEffect(() => { obtenerUsuarios(); }, []);
 
