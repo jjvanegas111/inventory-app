@@ -64,6 +64,10 @@ export default function VentasCasa() {
     setTextoBusqueda('');
   };
 
+  /**
+    * Registra la venta en Firestore y descuenta el stock únicamente de stock_casa.
+    * La ubicación 'casa' es crucial para que los reportes separen ventas del stand vs casa.
+  */
   const procesarPago = async (metodo) => {
     setGuardando(true);
     try {

@@ -31,7 +31,8 @@ export default function DashboardAdmin() {
     catch (e) { console.error(e); }
   };
 
-  // --- LÓGICA DEL ESCÁNER CON TRADUCCIÓN Y ESTILIZACIÓN TOTAL ---
+  // Carga inicial: ventas de hoy, último cierre de caja, inventario completo
+  // y los últimos 10 registros de auditoría para el monitor en tiempo real.
   useEffect(() => {
     let scanner;
     if (escanerEdicion && productoEditando) {
@@ -119,6 +120,11 @@ export default function DashboardAdmin() {
     }
   }, [escanerEdicion]);
 
+  /**
+    * Antes de guardar, verifica que ningún código de barras nuevo esté duplicado
+    * en otro producto. El primer código de la lista se convierte en el principal
+    * y el resto pasan a barras_adicionales.
+  */
   const guardarEdicionProducto = async (e) => {
     e.preventDefault();
     try {
@@ -176,6 +182,11 @@ export default function DashboardAdmin() {
     }
   };
 
+  /**
+    * Permite mover unidades entre Casa y Stand sin crear ni eliminar registros.
+    * Usa increment() atómico de Firestore para evitar condiciones de carrera
+    * si dos usuarios operan simultáneamente.
+  */
   const handleTraslado = async (p) => {
     const direccion = prompt(`TRASLADO DE INVENTARIO: ${p.nombre}\n\nEscribe '1' para mover de CASA a STAND.\nEscribe '2' para mover de STAND a CASA.`);
     if (!direccion) return;
@@ -211,6 +222,11 @@ export default function DashboardAdmin() {
     } catch (e) { alert("Error en el traslado."); }
   };
 
+  /**
+    * Consulta las ventas del periodo seleccionado en Firestore y genera un PDF
+    * con resumen financiero (ingresos, costos, ganancia neta) y detalle de transacciones.
+    * Para reportes mensuales incluye además el top 5 de productos más vendidos.
+  */
   const procesarYGenerarPDF = async (fechaInicio, fechaFin, tituloReporte) => {
     try {
       const q = query(collection(db, 'ventas'), where('fecha', '>=', fechaInicio), where('fecha', '<=', fechaFin), orderBy('fecha', 'asc'));

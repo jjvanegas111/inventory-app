@@ -21,7 +21,12 @@ export default function AgregarProducto() {
 
   const nombreAdmin = localStorage.getItem('usuarioNombre') || "Admin";
 
-  // --- LÓGICA DEL ESCÁNER CON TRADUCCIÓN PROFUNDA Y ESTILIZACIÓN DEL SELECTOR ---
+  /**
+    * Html5QrcodeScanner genera su UI en inglés sin opción oficial de traducción.
+    * Este efecto usa un intervalo para interceptar y traducir los textos del DOM
+    * al español después de que la librería los renderiza, mejorando la UX para
+    * usuarios no técnicos como las vendedoras del stand.
+  */
   useEffect(() => {
     let scanner;
     if (escanerActivo) {
