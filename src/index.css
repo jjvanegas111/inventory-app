@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+/* Estilos para tunear el lector de códigos en iPhone */
+#lector-camara button {
+    @apply bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-xl transition-colors shadow-md my-4 uppercase text-sm border-none cursor-pointer inline-block;
+}
+
+#lector-camara a {
+    @apply text-orange-600 font-semibold no-underline text-sm block mt-2;
+}
+
+/* Ocultar textos innecesarios que vienen en inglés */
+#lector-camara img[alt="Info icon"], 
+#lector-camara img[alt="Camera menu icon"] {
+    display: none;
+}
